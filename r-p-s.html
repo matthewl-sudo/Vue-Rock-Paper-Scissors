@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Vue.Js Rock Paper Scissors In-Class Example</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+        <style media="screen">
+             p{text-transform: capitalize;}
+             form button{ padding:1rem;
+             width: 30%;}
+             form button:hover{
+                opacity: .7;
+             }
+             form button:first-child{
+                 margin-left: 5%;
+             }
+             h1, p, h2{
+                text-align: center;
+             }
+        </style>
+    </head>
+    <body>
+        <div id="rps-container">
+            <rock-paper-scissors></rock-paper-scissors>
+        </div>
+
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://kit.fontawesome.com/f5a250744a.js" crossorigin="anonymous"></script>
+        <script type="text/javascript" defer>
+
+            Vue.component('rock-paper-scissors',{
+                data:function(){
+                    return{
+                        appTitle:'Rock Paper Scissors Game (Vue!)',
+                        playerHand: '',
+                        computerHand: '',
+                        playerScore: 0,
+                        computerScore:0,
+                        gameMessage:'Choose Rock, Paper, or Scissors to begin!'
+                    }
+                },
+                methods:{
+                    setComputerHand(){
+                            //Get a Random interger from 1 to 3
+                            var randOneToThree = Math.floor((Math.random() * 3)+1);
+
+                            if (randOneToThree == 1) {
+                                this.computerHand = 'rock';
+                            }
+                            else if (randOneToThree == 2) {
+                                this.computerHand = 'paper';
+                            }
+                            else {
+                                this.computerHand = 'scissors';
+                            }
+                    },
+                    playGame(){
+                        // Get Computer's Hand.
+                        this.setComputerHand();
+                        // Handle a tie
+                        if (this.playerHand === this.computerHand){
+                            this.gameMessage = 'Tie game! No point.'
+                        }
+                        // Handle player win scenarioss
+                        else if (
+                            (this.computerHand === 'rock' && this.playerHand === 'paper')
+                            ||
+                            (this.computerHand === 'paper' && this.playerHand === 'scissors')
+                            ||
+                            (this.computerHand === 'scissors' && this.playerHand === 'rock')
+                        ){
+                            this.gameMessage = 'Player wins this round!';
+                            this.playerScore++;
+                        }
+                        else{
+                            this.gameMessage = 'Computer wins this round!';
+                            this.computerScore++;
+                        }
+                    }
+                },
+                template:`
+                    <div id="rps" class="container is-fluid">
+                        <h1 v-text="appTitle" class="title is-3"></h1>
+                        <form @submit.prevent="playGame" class="notification ">
+                            <button class="button is-medium" @click="playerHand='rock'" value="Rock" type="submit"><i class="far fa-hand-rock"> Rock</i></button>
+                            <button class="button is-medium" @click="playerHand='paper'"value="Paper"  type="submit"><i class="far fa-hand-paper"> Paper</i></button>
+                            <button class="button is-medium" @click="playerHand='scissors'" value="Scissors" type="submit"><i class="far fa-hand-scissors"> Scissors</i></button>
+                        </form>
+                        <div class="column">
+                        <h2 class='title is-5'>
+                            Game Status:
+                            <span v-text="gameMessage"></span>
+                        </h2>
+                        <p>
+                            Player Hand:
+                            <span v-text="playerHand"></span><br>
+                            Player Score:
+                            <span v-text="playerScore"></span>
+                        </p>
+                        <br>
+                        <p>
+                            Computer Hand:
+                            <span v-text="computerHand"></span><br>
+                            Computer Score:
+                            <span v-text="computerScore"></span>
+                        </p>
+                        </div>
+                    </div>
+                `
+            });
+            // Intialize instance of Vue
+            var rpsGame = new Vue({
+                el: '#rps-container'
+            });
+        </script>
+    </body>
+</html>
